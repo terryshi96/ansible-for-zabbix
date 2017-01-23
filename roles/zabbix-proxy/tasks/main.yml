@@ -1,0 +1,8 @@
+---
+   - name: install zabbix-server and zabbix-server
+    yum: name={{ item }} state=latest
+    with_items:
+      - mysql-server
+      - zabbix-proxy
+      - zabbix-proxy-mysql
+      - 

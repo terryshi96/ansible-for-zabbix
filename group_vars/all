@@ -1,0 +1,6 @@
+---
+#变量信息文件
+zabbix_server: 192.168.1.1
+zabbix_proxy: 192.168.1.2
+ansible_ssh_user: root
+zabbix_server_version: 3.0
