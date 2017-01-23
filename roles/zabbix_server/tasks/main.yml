@@ -18,6 +18,7 @@
      - php-mbstring
      - php-mysql
      - php-xml
+     - MySQL-python
 
   - name: init mysql
    shell: mysql_install_db

@@ -5,6 +5,7 @@
       - mysql-server
       - zabbix-proxy
       - zabbix-proxy-mysql
+      - MySQL-python
 
   - name: init mysql
    shell: mysql_install_db
