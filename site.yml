@@ -1,0 +1,10 @@
+---
+  - hosts: all
+  #dont get facts
+   gather_facts: False
+  #set tags to choose to install a specific role
+   roles:
+     - { role: base, tags: base }
+     - { role: zabbix_server, when: "'zabbix_server' in group_names", tags: server }
+     - { role: zabbix_proxy, when: "'zabbix_proxy' in group_names", tags: proxy }
+     - { role: zabbix_agent, tags: agent }

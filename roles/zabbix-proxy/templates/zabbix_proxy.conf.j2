@@ -1,0 +1,1036 @@
+
+
+
+
+
+# This is a configuration file for Zabbix Proxy process
+
+# To get more information about Zabbix,
+
+# visit http://www.zabbix.com
+
+############ GENERAL PARAMETERS #################
+
+### Option: ProxyMode
+
+# Proxy operating mode
+
+# 0 - proxy in the active mode
+
+# 1 - proxy in the passive mode
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#ProxyMode=0或1
+
+#说明：ZABBIX的两种工作模式，默认为主动。当此值为0时，agent工作在主动模式下，为1时，agent工作在被动模式下。
+
+# ProxyMode=0
+
+### Option: Server
+
+# IP address (or hostname) of Zabbix server.
+
+# Active proxy will get configuration data from the server.
+
+# For a proxy in the passive mode this parameter will be ignored.
+
+#
+
+# Mandatory: yes (if ProxyMode is set to 0)
+
+# Default:
+
+# Server=
+
+#Server=IP地址
+
+#说明：此参数用于设置zabbix Server端IP地址。在主动模式下，二级代理将采集到的数据传送到此IP所在服务端。
+
+#但被模式下，此参数被忽略
+
+Server= {{ zabbix_proxy }}
+
+### Option: ServerPort
+
+# Port of Zabbix trapper on Zabbix server.
+
+# For a proxy in the passive mode this parameter will be ignored.
+
+#
+
+# Mandatory: no
+
+# Range: 1024-32767
+
+# Default:
+
+#ServerPort=端口号
+
+#说明：代理端访问服务端的目标端口，默认为10051，非特殊情况下，不建议修改
+
+ServerPort=10051
+
+### Option: Hostname
+
+# Unique, case sensitive Proxy name. Make sure the Proxy name is known to the server!
+
+# Value is acquired from HostnameItem if undefined.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+# Hostname=
+
+Hostname= {{ hostname }}
+
+#说明：手工自定义一个主机名，可以和系统的主机名一样，也可以不一样，此参数可根据实际情况启用或关闭
+
+### Option: HostnameItem
+
+# Item used for generating Hostname if it is undefined.
+
+# Ignored if Hostname is defined.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：system.hostname是ZABBIX内置的一个自动获取主机名的方法，为了方便配置，建议打开此参数而关闭Hostname参数#。
+
+# HostnameItem=system.hostname
+
+### Option: ListenPort
+
+# Listen port for trapper.
+
+#
+
+# Mandatory: no
+
+# Range: 1024-32767
+
+# Default:
+
+#代理服务器服务监听端口，默认为10051，非特殊情况下不建议修改
+
+# ListenPort=10051
+
+### Option: SourceIP
+
+# Source IP address for outgoing connections.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：当系统设置有多个IP时，需要指定一个IP与服务端通信，若系统只有一个IP，也建议指定一个IP
+
+# SourceIP=
+
+### Option: LogFile
+
+# Name of log file.
+
+# If not set, syslog is used.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+# LogFile=
+
+#代理端日志路径，若设置为空，则将日志输入到系统日志中
+
+LogFile=/var/log/zabbix/zabbix_proxy.log
+
+### Option: LogFileSize
+
+# Maximum size of log file in MB.
+
+# 0 - disable automatic log rotation.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1024
+
+# Default:
+
+#说明：当日志大小达到多少M时便轮转并自动覆盖
+
+# LogFileSize=1
+
+### Option: DebugLevel
+
+# Specifies debug level
+
+# 0 - no debug无日志
+
+# 1 - critical information灾难信息
+
+# 2 - error information错误信息
+
+# 3 - warnings警告信息
+
+# 4 - for debugging (produces lots of information)调试级别
+
+#
+
+# Mandatory: no
+
+# Range: 0-4
+
+# Default:
+
+#说明：0~4级别，日志产生量在相同单位时间，生成的日志量为递增，即0级别日志量最少，4级别最多，默认3级别，建议视具体情况，自行把握
+
+# DebugLevel=3
+
+### Option: PidFile
+
+# Name of PID file.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#pidFile=PID路径
+
+#说明：指定程程序PIDFILE路径，可修改到其它路径，但SNC不建议修改
+
+PidFile=/tmp/zabbix_proxy.pid
+
+### Option: DBHost
+
+# Database host name.
+
+# If set to localhost, socket is used for MySQL.
+
+# If set to empty string, socket is used for PostgreSQL.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明:代理服务器所对应的数据库IP，若设置为LOCALHOST，mysql数据库利用SOCKET连接
+
+DBHost=localhost
+
+### Option: DBName
+
+# Database name.
+
+# For SQLite3 path to database file must be provided. DBUser and DBPassword are ignored.
+
+# Warning: do not attempt to use the same database Zabbix server is using.
+
+#
+
+# Mandatory: yes
+
+# Default:
+
+#代理服务器所对应的数据库名，必填项
+
+# DBName=
+
+DBName=zabbix_proxy
+
+### Option: DBSchema
+
+# Schema name. Used for IBM DB2.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：FOR IBM DB2数据库
+
+# DBSchema=
+
+### Option: DBUser
+
+# Database user. Ignored for SQLite.
+
+#
+
+# Default:
+
+#说明;连接数据库的用户名
+
+# DBUser=
+
+DBUser=zabbix
+
+### Option: DBPassword
+
+# Database password. Ignored for SQLite.
+
+# Comment this line if no password is used.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：连接数据库的密码
+
+DBPassword=proxy
+
+### Option: DBSocket
+
+# Path to MySQL socket.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：mysql数据库SOCKET路径
+
+#DBSocket=/tmp/mysql/mysql.sock
+
+# Option: DBPort
+
+# Database port when not using local socket. Ignored for SQLite.
+
+#
+
+# Mandatory: no
+
+# Default (for MySQL):
+
+#说明：mysql数据库端口
+
+DBPort=3306
+
+######### PROXY SPECIFIC PARAMETERS #############
+
+#代理专用参数
+
+### Option: ProxyLocalBuffer
+
+# Proxy will keep data locally for N hours, even if the data have already been synced with the server.
+
+# This parameter may be used if local data will be used by third party applications.
+
+#
+
+# Mandatory: no
+
+# Range: 0-720
+
+# Default:
+
+#说明：代理保存本地数据N小时，不管数据是否已同步到服务端，此参数主要用于第三方软件获取采集数据，SNC暂无此模块，建议关闭
+
+# ProxyLocalBuffer=0
+
+### Option: ProxyOfflineBuffer
+
+# Proxy will keep data for N hours in case if no connectivity with Zabbix Server.
+
+# Older data will be lost.
+
+#
+
+# Mandatory: no
+
+# Range: 1-720
+
+# Default:
+
+#说明:此参数应用场景：当代理端与服务端断开N小时后，未提交的数据将被清除。此参数用于设置代理端保持离线数据（未提交的数据）最大时长，单位为小时，视服务器稳定情况及磁盘容量自行决定。
+
+ProxyOfflineBuffer=1
+
+### Option: HeartbeatFrequency
+
+# Frequency of heartbeat messages in seconds.
+
+# Used for monitoring availability of Proxy on server side.
+
+# 0 - heartbeat messages disabled.
+
+# For a proxy in the passive mode this parameter will be ignored.
+
+#
+
+# Mandatory: no
+
+# Range: 0-3600
+
+# Default:
+
+#说明：在主动模式下，此参数用于设置代理端探测服务端是否可用间隔频率。若业务十分繁忙且主机较稳定，可适当考虑加大此数值。在被动模式下，此参数将被忽略
+
+# HeartbeatFrequency=60
+
+### Option: ConfigFrequency
+
+# How often proxy retrieves configuration data from Zabbix Server in seconds.
+
+# For a proxy in the passive mode this parameter will be ignored.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600*24*7
+
+# Default:
+
+#说明：用于从服务端获取服务端对代理端有影响的相关配置的频率，建议保持默认
+
+# ConfigFrequency=3600
+
+### Option: DataSenderFrequency
+
+# Proxy will send collected data to the Server every N seconds.
+
+# For a proxy in the passive mode this parameter will be ignored.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600
+
+# Default:
+
+#用于设置代理将agent提交的数据转发给SERVER端的频率，默认1秒提交一次，若业务不是很忙，可适当加大此数据，以减小代理负载
+
+DataSenderFrequency=1
+
+############ ADVANCED PARAMETERS ################
+
+#高级参数
+
+### Option: StartPollers
+
+# Number of pre-forked instances of pollers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明：默认启动代理端时，开启线程池数量，范围0-1000，若业务发现采集数据延时较大或业务繁忙，可考虑加大此数值
+
+# StartPollers=5
+
+### Option: StartIPMIPollers
+
+# Number of pre-forked instances of IPMI pollers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明:主要用于IPmi技术用于获取硬件状态场景。若无相关监控项，建议设置为0
+
+# StartIPMIPollers=0
+
+### Option: StartPollersUnreachable
+
+# Number of pre-forked instances of pollers for unreachable hosts (including IPMI).
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明：默认情况下，ZABBIX会启用指定进程用于探测某些不可达主机的（含IPMI场景）
+
+# StartPollersUnreachable=1
+
+### Option: StartTrappers
+
+# Number of pre-forked instances of trappers.
+
+# Trappers accept incoming connections from Zabbix sender and active agents.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明：用于设置诸如SNMP STRAPPER场景提交来的数据的接收进程数，若客户机SNMP TRAPPER技术较多，建议加大此参数值
+
+StartTrappers=5
+
+### Option: StartPingers
+
+# Number of pre-forked instances of ICMP pingers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明：用于设置启用icmp协议PING主机方式启动线程数量，若单台代理所管理机器超过500台，建议加大此数值
+
+StartPingers=1
+
+### Option: StartDiscoverers
+
+# Number of pre-forked instances of discoverers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-250
+
+# Default:
+
+说明：用于设置代理端自动发现主机的线程数量，若单台代理所管理机器超过500台，可以考虑加大此数值
+
+StartDiscoverers=1
+
+### Option: StartHTTPPollers
+
+# Number of pre-forked instances of HTTP pollers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+说明：用于设置WEB拨测监控线程数，可视具体情况增加或减少此数值。
+
+StartHTTPPollers=30
+
+### Option: JavaGateway
+
+# IP address (or hostname) of Zabbix Java gateway.
+
+# Only required if Java pollers are started.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：当数据采集使JMX方式启用
+
+# JavaGateway=
+
+### Option: JavaGatewayPort
+
+# Port that Zabbix Java gateway listens on.
+
+#
+
+# Mandatory: no
+
+# Range: 1024-32767
+
+# Default:
+
+#说明：JAVAGATEWAY 场景下使用
+
+# JavaGatewayPort=10052
+
+### Option: StartJavaPollers
+
+# Number of pre-forked instances of Java pollers.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1000
+
+# Default:
+
+#说明：JAVAGATEWAY 场景下使用
+
+# StartJavaPollers=0
+
+### Option: StartVMwareCollectors
+
+# Number of pre-forked vmware collector instances.
+
+#
+
+# Mandatory: no
+
+# Range: 0-250
+
+# Default:
+
+#说明：用于设置监控VMWARE Esxi主机实例时使用，若为0则不启用，若要监控ESXI主机，此值最少为1 ；视监控ESXI数量设置对应数值
+
+# StartVMwareCollectors=0
+
+### Option: VMwareFrequency
+
+# How often Zabbix will connect to VMware service to obtain a new data.
+
+#
+
+# Mandatory: no
+
+# Range: 10-86400
+
+# Default:
+
+#说明：代理端访问 VMWARE service的频率，单位:秒
+
+# VMwareFrequency=60
+
+### Option: VMwareCacheSize
+
+# Size of VMware cache, in bytes.
+
+# Shared memory size for storing VMware data.
+
+# Only used if VMware collectors are started.
+
+#
+
+# Mandatory: no
+
+# Range: 256K-2G
+
+# Default:
+
+#说明：划出多少共享内存用于存储VMWARE数据
+
+# VMwareCacheSize=8M
+
+### Option: SNMPTrapperFile
+
+# Temporary file used for passing data from SNMP trap daemon to the proxy.
+
+# Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：指定SNMP TRAPPER 时的临时文件，用于代理端启用SNMP TRAPPER功能时使用
+
+# SNMPTrapperFile=/tmp/zabbix_traps.tmp
+
+### Option: StartSNMPTrapper
+
+# If 1, SNMP trapper process is started.
+
+#
+
+# Mandatory: no
+
+# Range: 0-1
+
+# Default:
+
+#说明：是否启用 snmptrapper功能 ，默认不启用=0，启用=1（配合参数SNMPTrapperFile使用）
+
+# StartSNMPTrapper=0
+
+### Option: ListenIP
+
+# List of comma delimited IP addresses that the trapper should listen on.
+
+# Trapper will listen on all network interfaces if this parameter is missing.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：启用SNMPTRAPPER里 ，接收端监听的IP，此参数与StartSNMPTrapper，SNMPTrapperFile 联合使用
+
+ListenIP=0.0.0.0
+
+### Option: HousekeepingFrequency
+
+# How often Zabbix will perform housekeeping procedure (in hours).
+
+# Housekeeping is removing unnecessary information from history, alert, and alarms tables.
+
+#
+
+# Mandatory: no
+
+# Range: 1-24
+
+# Default:
+
+#说明：多少小时清理一次代理端数据库的 history, alert, and alarms，以保持代理端数据库轻便，建议保持默认
+
+# HousekeepingFrequency=1
+
+### Option: CacheSize
+
+# Size of configuration cache, in bytes.
+
+# Shared memory size, for storing hosts and items data.
+
+#
+
+# Mandatory: no
+
+# Range: 128K-2G
+
+# Default:
+
+#说明:指定划出多少系统共享内存用于存储zabbix hosts和ITEMS数据，若二级代理内存足够，建议可适当扩大此数值，可很大程度上解决二级代理 I/O压力，和数据库读压力
+
+# CacheSize=8M
+
+### Option: StartDBSyncers
+
+# Number of pre-forked instances of DB Syncers
+
+#
+
+# Mandatory: no
+
+# Range: 1-100
+
+# Default:
+
+#说明:启用多少进程用于zabbix程序将数据同步到数据库，若agent端机器数据多，且I/o压力不大，可以考虑适当加大此数值，以提高ZABBIX性能
+
+# StartDBSyncers=4
+
+### Option: HistoryCacheSize
+
+# Size of history cache, in bytes.
+
+# Shared memory size for storing history data.
+
+#
+
+# Mandatory: no
+
+# Range: 128K-2G
+
+# Default:
+
+#说明：用于设置划分多少系统共享内存用于存储采集的历史数据，此数值越大，数据库读压力越小
+
+# HistoryCacheSize=8M
+
+### Option: HistoryTextCacheSize
+
+# Size of text history cache, in bytes.
+
+# Shared memory size for storing character, text or log history data.
+
+#
+
+# Mandatory: no
+
+# Range: 128K-2G
+
+# Default:
+
+#说明:指定划出多少系统共享内存用于存储 character, text or log history数据，若二级代理内存足够，建议可适当扩大此数值，可很大程度上解决二级代理 I/O压力，和数据库读压力
+
+# HistoryTextCacheSize=16M
+
+### Option: Timeout
+
+# Specifies how long we wait for agent, SNMP device or external check (in seconds).
+
+#
+
+# Mandatory: no
+
+# Range: 1-30
+
+# Default:
+
+#说明：与AGNET\SNMP设备和其它外部设备通信超时设置，单位为秒；若采集数据不完整或网络繁忙，或从管理页面发现客户端状态变化频繁，可以考虑加大此数值。注意若此数值加大，应该考虑参数 StartPollers 是否有相应加大的必要。
+
+Timeout=30
+
+### Option: TrapperTimeout
+
+# Specifies how many seconds trapper may spend processing new data.
+
+#
+
+# Mandatory: no
+
+# Range: 1-300
+
+# Default:
+
+#说明：启用 trapper功能，用于进程等待超时设置。根据需要调整
+
+# TrapperTimeout=300
+
+### Option: UnreachablePeriod
+
+# After how many seconds of unreachability treat a host as unavailable.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600
+
+# Default:
+
+#说明：当AGNET端处于不可用状态下，间隔多少秒后，尝试重新连接。建议根据具体情况设置。注意，若此数值过小，右agent端业务系统繁忙时，有可能造成报警信息误报
+
+# UnreachablePeriod=45
+
+### Option: UnavailableDelay
+
+# How often host is checked for availability during the unavailability period, in seconds.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600
+
+# Default:
+
+#说明:当AGENT端处于可用状态下，间隔多少秒后，进行状态检查。若出现可正常采集数据，但管理页面AGENT状态不正常；若在网络，端口等均通畅情况下，AGENT状态仍不正常，可以考虑加大此数值
+
+# UnavailableDelay=60
+
+### Option: UnreachableDelay
+
+# How often host is checked for availability during the unreachability period, in seconds.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600
+
+# Default:
+
+#说明：当agent端处于不可达状态下，延迟多少秒后，进行重新尝试，建议保持默认，在AGENT接入调试阶段，可考虑减少此数值；上线后，若报错’Interrupted system call’，建议将此数值调整到300或以上
+
+# UnreachableDelay=15
+
+### Option: ExternalScripts
+
+# Full path to location of external scripts.
+
+# Default depends on compilation options.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：自定义脚本存储路径，非研发人员不建议修改此参数值
+
+# ExternalScripts=${datadir}/zabbix/externalscripts
+
+### Option: FpingLocation
+
+# Location of fping.
+
+# Make sure that fping binary has root ownership and SUID flag set.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：IPv4 FPING命令路径，仅ROOT可用。注意使用此命令时，应该确认此命令是否存在
+
+# FpingLocation=/usr/sbin/fping
+
+### Option: Fping6Location
+
+# Location of fping6.
+
+# Make sure that fping6 binary has root ownership and SUID flag set.
+
+# Make empty if your fping utility is capable to process IPv6 addresses.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：IPv6 FPING命令路径，仅ROOT可用。注意使用此命令时，应该确认此命令是否存在
+
+# Fping6Location=/usr/sbin/fping6
+
+### Option: SSHKeyLocation
+
+# Location of public and private keys for SSH checks and actions.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：在代理有需要SSH到AGENT端且采用用KEY验证方式时使用。非研发人员，不建议修改或设置
+
+# SSHKeyLocation=
+
+### Option: LogSlowQueries
+
+# How long a database query may take before being logged (in milliseconds).
+
+# Only works if DebugLevel set to 3 or 4.
+
+# 0 - don't log slow queries.
+
+#
+
+# Mandatory: no
+
+# Range: 1-3600000
+
+# Default:
+
+#说明:用于监控代理数据库慢查询功能，单位是毫秒；1毫秒=0.001秒，若有对代理端数据库监控慢查询的需求，可以视具体情况调整此数。
+
+# LogSlowQueries=0
+
+### Option: TmpDir
+
+# Temporary directory.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：zabbix代理工作的临时目录
+
+# TmpDir=/tmp
+
+### Option: AllowRoot
+
+# Allow the proxy to run as 'root'. If disabled and the proxy is started by 'root', the proxy
+
+# will try to switch to user 'zabbix' instead. Has no effect if started under a regular user.
+
+# 0 - do not allow
+
+# 1 - allow
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#说明：是否允许代理端以ROOT身份运行，若一个程序必须以ROOT身份执行，需开启此参数
+
+# AllowRoot=0
+
+### Option: Include
+
+# You may include individual files or all files in a directory in the configuration file.
+
+# Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+# Include=
+
+#说明：在一些情况下，软件的参数配置文件很长，为了方便管理，将配置文件切割成N个配置文件，但为了主配置参数文件的简洁，便会启用INCLUDE参数，以方便程序读取指定目录下的所有配置文件
+
+# Include=/usr/local/etc/zabbix_proxy.general.conf
+
+# Include=/usr/local/etc/zabbix_proxy.conf.d/
+
+####### LOADABLE MODULES #######
+
+### Option: LoadModulePath
+
+# Full path to location of proxy modules.
+
+# Default depends on compilation options.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#指定本地模块路径，非研发人员不建议修改
+
+# LoadModulePath=${libdir}/modules
+
+### Option: LoadModule
+
+# Module to load at proxy startup. Modules are used to extend functionality of the proxy.
+
+# Format: LoadModule=<module.so>
+
+# The modules must be located in directory specified by LoadModulePath.
+
+# It is allowed to include multiple LoadModule parameters.
+
+#
+
+# Mandatory: no
+
+# Default:
+
+#指定本地模块路径，非研发人员不建议修改
+
+# LoadModule=
